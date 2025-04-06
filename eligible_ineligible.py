@@ -32,7 +32,7 @@ def extract_hard_eligibility_criteria(text_chunks, batch_size=3):
     for i in range(0, len(text_chunks), batch_size):
         batch = "\n".join(text_chunks[i:i + batch_size])
         prompt = f"""
-You're a compliance expert. Extract all strict eligibility and mandatory exclusion criteria from this RFP text. Focus only on hard constraints like minimum revenue, specific licenses, years of experience, legal registrations, etc. Format each as a bullet point.
+You're a compliance expert. Extract all strict eligibility and mandatory exclusion criteria from this RFP text. Focus only on hard constraints. Format each as a bullet point.
 
 Text:
 {batch}
@@ -50,7 +50,7 @@ Text:
 # === Groq: Evaluate company against criteria ===
 def check_company_against_criteria(criteria_text, company_text):
     prompt = f"""
-Act as an auditor. Check whether the company profile meets the following mandatory eligibility criteria.
+Act as an auditor. Check whether the company profile meets the most of the following eligibility criteria.
 
 Eligibility Criteria:
 {criteria_text}
@@ -58,20 +58,17 @@ Eligibility Criteria:
 Company Profile:
 {company_text}
 
-Analyze the match and return a formatted output like:
-if the failed criteria is greater than Criteria Met, respond: 
+
+If the failed criteria is greater than Criteria Met, respond: 
 ❌ Ineligible
 
-
-
-
-If most of criteria are clearly met respond:
+If most of criteria are clearly met and Criteria Met are greater than failed criteria, respond:
 ✅ Eligible  
-
 
 If uncertain, respond:
 ✅ Eligible 
  
+Analyze the match and return a formatted output like:
 Criteria Met:
 - ...
 
